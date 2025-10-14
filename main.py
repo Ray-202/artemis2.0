@@ -1,4 +1,3 @@
-# ...existing code...
 import rasterio
 from pyproj import CRS, Transformer
 import numpy as np
