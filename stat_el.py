@@ -63,3 +63,19 @@ rows = np.random.randint(0, dem.shape[0], 10)
 cols = np.random.randint(0, dem.shape[1], 10)
 for r, c in zip(rows, cols):
     print(f"({r}, {c}) → {dem[r, c]:.2f} m")
+    
+    
+    
+    
+import numpy as np, matplotlib.pyplot as plt
+from matplotlib.colors import LightSource
+
+Z = dem.astype(float)
+ls = LightSource(azdeg=315, altdeg=45)           # sun from NW, 45° up
+hs = ls.hillshade(Z, vert_exag=1.0, dx=5.0, dy=5.0)  # dx,dy = pixel size (m)
+
+plt.figure(figsize=(8,8))
+plt.imshow(hs, cmap='gray')
+plt.title("Full Map Hillshade (fast 3D-look)")
+plt.axis('off')
+plt.show()
