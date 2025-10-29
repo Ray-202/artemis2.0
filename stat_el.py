@@ -67,15 +67,17 @@ for r, c in zip(rows, cols):
     
     
     
-import numpy as np, matplotlib.pyplot as plt
-from matplotlib.colors import LightSource
+H, W = dem.shape
+target_pts = 400_000                 # ~400k points
+stride = max(1, int(np.ceil(np.sqrt((H*W)/target_pts))))
+print("Using stride:", stride)
 
-Z = dem.astype(float)
-ls = LightSource(azdeg=315, altdeg=45)           # sun from NW, 45° up
-hs = ls.hillshade(Z, vert_exag=1.0, dx=5.0, dy=5.0)  # dx,dy = pixel size (m)
+sample = dem[::stride, ::stride]
+y = np.arange(sample.shape[0]); x = np.arange(sample.shape[1])
+X, Y = np.meshgrid(x, y)
 
-plt.figure(figsize=(8,8))
-plt.imshow(hs, cmap='gray')
-plt.title("Full Map Hillshade (fast 3D-look)")
-plt.axis('off')
-plt.show()
+fig = plt.figure(figsize=(9,7))
+ax = fig.add_subplot(111, projection='3d')
+ax.plot_surface(X, Y, sample, cmap='terrain', linewidth=0, antialiased=False)
+ax.view_init(elev=50, azim=-70)
+plt.tight_layout(); plt.show()
